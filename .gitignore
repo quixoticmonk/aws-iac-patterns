@@ -4,4 +4,5 @@ venv
 .idea
 source.bat
 .DS_Store
-infra/gist.py
+cdk.out
+infra/__pycache__/

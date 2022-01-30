@@ -29,20 +29,6 @@ class KendraConstruct(Construct):
             document_metadata_configurations=self.document_metadata_config
         )
 
-        # s3 data source
-        self.kendra_data_source_instance_role: Role = Role(self,
-                                                           f'{self.prefix}-kendra-datasource-role',
-                                                           role_name=f'{self.prefix}-kendra-datasource-role',
-                                                           assumed_by=ServicePrincipal('kendra.amazonaws.com'))
-
-        self.kendra_data_source_instance_role.add_to_policy(PolicyStatement(
-            effect=Effect.ALLOW,
-            actions=[
-                'kendra:BatchPutDocument',
-                'kendra:BatchDeleteDocument',
-            ],
-            resources=[self.kendra_index.attr_arn]
-        ))
 
     @staticmethod
     def create_kendra_allow_logstreams_policy() -> PolicyDocument:
