@@ -1,7 +1,13 @@
+"""
+Kendra construct to deploy the following resources:
+* Kendra index
+* Kendra roles for data source and index
+"""
+
 import json
-from aws_cdk.core import Construct, Stack, Duration, RemovalPolicy, Aws
-from aws_cdk.aws_kendra import CfnIndex, CfnDataSource
 from aws_cdk.aws_iam import Role, ServicePrincipal, PolicyDocument, PolicyStatement, Effect, ManagedPolicy
+from aws_cdk.aws_kendra import CfnIndex, CfnDataSource
+from aws_cdk.core import Construct, Aws
 
 
 class KendraConstruct(Construct):
@@ -117,7 +123,7 @@ class KendraConstruct(Construct):
                              f"{self.prefix}-wc", index_id=self.kendra_index.attr_id,
                              type="WEBCRAWLER",
                              name=f"{self.prefix}-wc",
-                             description=f"Webcrawler data source",
+                             description="Webcrawler data source",
                              role_arn=self.kendra_data_source_instance_role.role_arn,
                              schedule=context["crawler_schedule"],
                              data_source_configuration=CfnDataSource.DataSourceConfigurationProperty(
