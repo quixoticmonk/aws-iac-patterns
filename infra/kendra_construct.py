@@ -4,15 +4,15 @@ from aws_cdk.aws_kendra import CfnIndex, CfnDataSource
 from aws_cdk.aws_iam import Role, ServicePrincipal, PolicyDocument, PolicyStatement, Effect, ManagedPolicy
 
 
-
 class KendraConstruct(Construct):
     """
     returns an instance of the kendra construct
     """
-    def __init__(self, scope: Construct, construct_id:str, context: str, **kwargs) -> None:
+
+    def __init__(self, scope: Construct, construct_id: str, context: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        context:dict = dict(self.node.try_get_context(context))
+        context: dict = dict(self.node.try_get_context(context))
         self.prefix: str = context['project_name'].lower()
 
         self.kendra_edition: str = "ENTERPRISE_EDITION"
@@ -29,7 +29,6 @@ class KendraConstruct(Construct):
             document_metadata_configurations=self.document_metadata_config
         )
 
-
         # s3 data source
         self.kendra_data_source_instance_role: Role = Role(self,
                                                            f'{self.prefix}-kendra-datasource-role',
@@ -44,7 +43,6 @@ class KendraConstruct(Construct):
             ],
             resources=[self.kendra_index.attr_arn]
         ))
-
 
     @staticmethod
     def create_kendra_allow_logstreams_policy() -> PolicyDocument:
@@ -125,7 +123,6 @@ class KendraConstruct(Construct):
                 managed_policy_name="CloudWatchLogsFullAccess")]
         )
 
-
     def create_crawler_data_source(self, context: dict):
         """
         Creating a datasource with webcrawler as the type
@@ -136,15 +133,16 @@ class KendraConstruct(Construct):
                              name=f"{self.prefix}-wc",
                              description=f"Webcrawler data source",
                              role_arn=self.kendra_data_source_instance_role.role_arn,
-                             schedule=context[f"crawler_schedule"],
+                             schedule=context["crawler_schedule"],
                              data_source_configuration=CfnDataSource.DataSourceConfigurationProperty(
                                  web_crawler_configuration=CfnDataSource.WebCrawlerConfigurationProperty(
                                      urls=CfnDataSource.WebCrawlerUrlsProperty(
                                          site_maps_configuration=CfnDataSource.WebCrawlerSiteMapsConfigurationProperty(
-                                             site_maps=site_map_environs
+                                             site_maps=context["sitemap_urls"]
                                          )),
-                                     crawl_depth=context["crawldepth"],
-                                     max_content_size_per_page_in_mega_bytes=context["max_content_size_per_page_in_mega_bytes"],
+                                     crawl_depth=context["crawl_depth"],
+                                     max_content_size_per_page_in_mega_bytes=context[
+                                         "max_content_size_per_page_in_mega_bytes"],
                                      max_links_per_page=context["max_links_per_page"],
                                      max_urls_per_minute_crawl_rate=context["max_urls_per_minute_crawl_rate"]
                                  )

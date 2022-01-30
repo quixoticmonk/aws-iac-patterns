@@ -11,6 +11,17 @@
     "@aws-cdk/aws-s3:grantWriteWithoutAcl": true,
     "@aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount": true,
     "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
-    "@aws-cdk/aws-efs:defaultEncryptionAtRest": true
+    "@aws-cdk/aws-efs:defaultEncryptionAtRest": true,
+    "kendra": {
+      "project_name": "kendra-poc",
+      "sitemap_urls":[
+        "https://www.apple.com/sitemap.xml"
+      ],
+      "crawler_schedule": "cron(0 8 * * ? *)",
+      "crawl_depth": 2,
+      "max_content_size_per_page_in_mega_bytes": 5,
+      "max_links_per_page": 5,
+      "max_urls_per_minute_crawl_rate": 300
+    }
   }
 }
