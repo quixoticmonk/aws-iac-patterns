@@ -2,12 +2,17 @@
 Kendra construct to deploy the following resources:
 * Kendra index
 * Kendra roles for data source and index
+* kendra webcrawler data source with sitemap from context json
+* A source bucket to hold data
+* S3 data source for Kendra
 """
 
 import json
 from aws_cdk.aws_iam import Role, ServicePrincipal, PolicyDocument, PolicyStatement, Effect, ManagedPolicy
 from aws_cdk.aws_kendra import CfnIndex, CfnDataSource
 from aws_cdk.core import Construct, Aws
+
+KENDRA_PRINCIPAL = "kendra.amazonaws.com"
 
 
 class KendraConstruct(Construct):
@@ -21,20 +26,46 @@ class KendraConstruct(Construct):
         context: dict = dict(self.node.try_get_context(context))
         self.prefix: str = context['project_name'].lower()
 
-        self.kendra_edition: str = "ENTERPRISE_EDITION"
-
         with open('infra/kendra_attributes.json', 'r') as file:
             self.document_metadata_config = json.loads(file.read())
 
         self.kendra_instance_role = self.create_kendra_index_role()
+
         self.kendra_index: CfnIndex = CfnIndex(
             self, f"{self.prefix}-kendra-index",
-            edition=self.kendra_edition, name=f"{self.prefix}-kendra-index",
+            edition="ENTERPRISE_EDITION", name=f"{self.prefix}-kendra-index",
             description="Kendra index",
             role_arn=self.kendra_instance_role.role_arn,
             document_metadata_configurations=self.document_metadata_config
         )
 
+        self.kendra_data_source_instance_role: Role = Role(self,
+                                                           f'{self.prefix}-kendra-datasource-role',
+                                                           role_name=f'{self.prefix}-kendra-datasource-role',
+                                                           assumed_by=ServicePrincipal(KENDRA_PRINCIPAL))
+
+        self.kendra_data_source_instance_role.add_to_policy(PolicyStatement(
+            effect=Effect.ALLOW,
+            actions=[
+                'kendra:BatchPutDocument',
+                'kendra:BatchDeleteDocument',
+            ],
+            resources=[self.kendra_index.attr_arn]
+        ))
+
+        # s3 data source creation
+        self.source_bucket: Bucket = self.create_bucket()
+        self.source_bucket.grant_read(self.kendra_data_source_instance_role)
+
+        self.s3_data_source: CfnDataSource = self.create_s3_data_source(
+            stage,
+            self.kendra_index.attr_id, self.source_bucket.bucket_name,
+            self.kendra_data_source_instance_role.role_arn
+        )
+
+        # Webcrawler data source creation
+        self.wc_source: CfnDataSource = self.create_crawler_data_source(
+            context)
 
     @staticmethod
     def create_kendra_allow_logstreams_policy() -> PolicyDocument:
@@ -105,7 +136,7 @@ class KendraConstruct(Construct):
             self, f"{self.prefix}-kendra-servicerole",
             role_name=f"{self.prefix}-kendra-servicerole",
             description=f"{self.prefix}-kendra-ServiceRole",
-            assumed_by=ServicePrincipal("kendra.amazonaws.com"),
+            assumed_by=ServicePrincipal(KENDRA_PRINCIPAL),
             inline_policies={
                 "KendraAllowMetricObject": self.create_allow_metrics_policy(),
                 "KendraAllowLogObject": self.create_kendra_allow_log_policy(),
@@ -140,3 +171,36 @@ class KendraConstruct(Construct):
                                  )
                              )
                              )
+
+    def create_s3_data_source(self, stage: str,
+                              index_id,
+                              source_bucket_name, data_source_role_arn):
+        """
+        returns an S3 data source
+        """
+        return CfnDataSource(
+            self, f"{self.prefix}-kendra-s3-datasource",
+            name=f"{self.prefix}-kendra-s3-datasource",
+            index_id=index_id,
+            type="S3",
+            data_source_configuration=CfnDataSource.DataSourceConfigurationProperty(
+                s3_configuration=CfnDataSource.S3DataSourceConfigurationProperty(
+                    bucket_name=source_bucket_name
+                )
+            ),
+            role_arn=data_source_role_arn,
+            schedule=""  # setting this to blank to have an ondemand schedule, else match the cron schedule
+        )
+
+    def create_bucket(self):
+        """
+        returns a source bucket reference for data source
+        """
+        return Bucket(self, f"{self.prefix}-kendra-s3-source-bucket",
+                      bucket_name=f"{self.prefix}-kendra-s3-source-bucket",
+                      block_public_access=BlockPublicAccess.BLOCK_ALL,
+                      removal_policy=RemovalPolicy.DESTROY,
+                      auto_delete_objects=True,
+                      encryption=BucketEncryption.S3_MANAGED,
+                      enforce_ssl=True
+                      )
