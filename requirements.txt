@@ -1,0 +1,2 @@
+-e .
+aws-cdk.aws-kendra==1.127.0
