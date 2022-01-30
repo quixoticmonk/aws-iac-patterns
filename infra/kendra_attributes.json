@@ -1,0 +1,12 @@
+[
+  {
+    "name": "attribute1",
+    "type": "STRING_VALUE",
+    "search": {
+      "displayabale": true,
+      "searchable": true,
+      "sortable": true,
+      "facetable": true
+    }
+  }
+]
