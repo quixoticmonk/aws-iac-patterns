@@ -10,7 +10,8 @@ Kendra construct to deploy the following resources:
 import json
 from aws_cdk.aws_iam import Role, ServicePrincipal, PolicyDocument, PolicyStatement, Effect, ManagedPolicy
 from aws_cdk.aws_kendra import CfnIndex, CfnDataSource
-from aws_cdk.core import Construct, Aws
+from aws_cdk.core import Construct, Aws, RemovalPolicy
+from aws_cdk.aws_s3 import Bucket, BucketEncryption, BucketPolicy, BlockPublicAccess
 
 KENDRA_PRINCIPAL = "kendra.amazonaws.com"
 
@@ -58,7 +59,6 @@ class KendraConstruct(Construct):
         self.source_bucket.grant_read(self.kendra_data_source_instance_role)
 
         self.s3_data_source: CfnDataSource = self.create_s3_data_source(
-            stage,
             self.kendra_index.attr_id, self.source_bucket.bucket_name,
             self.kendra_data_source_instance_role.role_arn
         )
@@ -172,7 +172,7 @@ class KendraConstruct(Construct):
                              )
                              )
 
-    def create_s3_data_source(self, stage: str,
+    def create_s3_data_source(self,
                               index_id,
                               source_bucket_name, data_source_role_arn):
         """

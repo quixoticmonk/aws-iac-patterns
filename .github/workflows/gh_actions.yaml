@@ -20,13 +20,12 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: "3.10"
-    - name: Install dependencies & sun synth
+    - name: Amazon-kendra - Install dependencies & run synth
       run: |
         npm install -g aws-cdk@1.127.0
         cd amazon-kendra/cdk
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         cdk synth
-    - name: Lint with pylint
-      run: |
+        echo "***Lint with pylint ****"
         pylint amazon-kendra/cdk/infra/
 
