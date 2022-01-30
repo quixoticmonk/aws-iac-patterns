@@ -1,7 +1,7 @@
 ven
 .venv
 venv
-.idea
+../../.idea
 source.bat
 .DS_Store
 cdk.out
