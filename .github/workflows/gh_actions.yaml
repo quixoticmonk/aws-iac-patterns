@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         npm install -g aws-cdk@1.127.0
-        cd cdk
+        cd amazon-kendra/cdk
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
       run: |
