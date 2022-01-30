@@ -25,3 +25,6 @@ The iac code deploys the below resources:
 * Customization for VPC CIDR and addressing
 * Move MSK to module and publish
 * Further improved handling of us-east-1e zone (which doesn't support MSK yet)
+
+## Graph
+<img src="tf_graph.svg">
