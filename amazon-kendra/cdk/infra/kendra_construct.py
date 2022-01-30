@@ -11,7 +11,7 @@ import json
 from aws_cdk.aws_iam import Role, ServicePrincipal, PolicyDocument, PolicyStatement, Effect, ManagedPolicy
 from aws_cdk.aws_kendra import CfnIndex, CfnDataSource
 from aws_cdk.core import Construct, Aws, RemovalPolicy
-from aws_cdk.aws_s3 import Bucket, BucketEncryption, BucketPolicy, BlockPublicAccess
+from aws_cdk.aws_s3 import Bucket, BucketEncryption, BlockPublicAccess
 
 KENDRA_PRINCIPAL = "kendra.amazonaws.com"
 
@@ -27,7 +27,7 @@ class KendraConstruct(Construct):
         context: dict = dict(self.node.try_get_context(context))
         self.prefix: str = context['project_name'].lower()
 
-        with open('infra/kendra_attributes.json', 'r') as file:
+        with open('infra/kendra_attributes.json', 'r', encoding="utf8") as file:
             self.document_metadata_config = json.loads(file.read())
 
         self.kendra_instance_role = self.create_kendra_index_role()
