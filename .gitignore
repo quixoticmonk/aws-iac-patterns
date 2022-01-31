@@ -37,4 +37,4 @@ remote_state.tf
 *.pem*
 /.idea
 .idea
-amazon-msk/terraform/.terraform.lock.hcl
+.terraform.lock.hcl
