@@ -1,6 +1,6 @@
 locals {
   common-tags = {
-    "project"     = "event-processor"
+    "project"     = "aws-iac-patterns"
     "environment" = var.environment
     "id"          = random_id.rando.hex
   }

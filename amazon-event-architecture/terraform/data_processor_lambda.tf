@@ -8,7 +8,7 @@ module "incoming_data_lambda_function" {
   handler       = "index.handler"
   runtime       = "python3.8"
   timeout       = 30
-  source_path   = "./src/incoming-data-processor-lambda"
+  source_path   = "./src/data-processor-lambda"
 
   attach_policy_json = true
   policy_json        = <<EOF
