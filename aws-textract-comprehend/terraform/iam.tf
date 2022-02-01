@@ -14,7 +14,8 @@ resource "aws_iam_role" "iam_role" {
                     "Service" : [
                         "ec2.amazonaws.com",
                         "lambda.amazonaws.com",
-                        "s3.amazonaws.com"
+                        "s3.amazonaws.com",
+                        "sqs.amazonaws.com"
                     ]
                 }
             }

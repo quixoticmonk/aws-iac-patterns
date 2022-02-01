@@ -28,5 +28,5 @@ The iac code deploys the below resources:
 ## Pending
 
 * Migrate to latest version of Terraform
-* Encrypt all the things
+* Improve security policies from being so broad (see: `policy-attach` var)
 * Improve function code
