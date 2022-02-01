@@ -39,3 +39,4 @@ remote_state.tf
 .idea
 .terraform.lock.hcl
 aws-textract-comprehend/terraform/provider.tf
+.DS_Store
