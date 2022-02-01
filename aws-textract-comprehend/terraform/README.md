@@ -20,6 +20,11 @@ The iac code deploys the below resources:
         terraform init
         terraform apply
 
+## Execution
+
+1. Upload supported file types (`.pdf,.jpg,.pdf`) into the input S3 bucket under input\result-XXXX (rando ID will be generated)
+2. Files will be parsed (on object notification) and placed into the root of the directory.
+
 ## Pending
 
 * Migrate to latest version of Terraform

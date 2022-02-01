@@ -17,7 +17,7 @@ resource "aws_lambda_function" "upload" {
 }
 
 resource "aws_lambda_function" "validate" {
-  s3_bucket     = aws_s3_bucket.resultbucket1.id
+  s3_bucket     = aws_s3_bucket.assets-bucket.id
   s3_key        = "validate.zip"
   function_name = "validate-${random_id.rando.hex}"
   role          = aws_iam_role.iam_role.arn
@@ -42,7 +42,7 @@ resource "aws_lambda_function" "validate" {
 }
 
 resource "aws_lambda_function" "parse" {
-  s3_bucket     = aws_s3_bucket.resultbucket1.id
+  s3_bucket     = aws_s3_bucket.assets-bucket.id
   s3_key        = "parse-desc.zip"
   function_name = "parse-${random_id.rando.hex}"
   role          = aws_iam_role.iam_role.arn
@@ -60,7 +60,7 @@ resource "aws_lambda_function" "parse" {
 }
 
 resource "aws_lambda_function" "extract" {
-  s3_bucket     = aws_s3_bucket.resultbucket1.id
+  s3_bucket     = aws_s3_bucket.assets-bucket.id
   s3_key        = "extract-queue.zip"
   function_name = "extract-${random_id.rando.hex}"
   role          = aws_iam_role.iam_role.arn

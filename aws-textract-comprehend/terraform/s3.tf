@@ -61,8 +61,8 @@ resource "aws_s3_bucket_public_access_block" "result-block-public" {
   ignore_public_acls      = true
 }
 
-resource "aws_s3_bucket" "resultbucket1" {
-  bucket = "result1-${random_id.rando.hex}"
+resource "aws_s3_bucket" "assets-bucket" {
+  bucket = "textract-comprehend-assets-${random_id.rando.hex}"
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -82,7 +82,7 @@ resource "aws_s3_bucket" "resultbucket1" {
 
 resource "aws_s3_bucket_object" "parse-desc" {
   key                    = "parse-desc.zip"
-  bucket                 = aws_s3_bucket.resultbucket1.id
+  bucket                 = aws_s3_bucket.assets-bucket.id
   source                 = "inventory/parse-desc.zip"
   server_side_encryption = "AES256"
   tags                   = local.common-tags
@@ -90,7 +90,7 @@ resource "aws_s3_bucket_object" "parse-desc" {
 
 resource "aws_s3_bucket_object" "extract-queue" {
   key                    = "extract-queue.zip"
-  bucket                 = aws_s3_bucket.resultbucket1.id
+  bucket                 = aws_s3_bucket.assets-bucket.id
   source                 = "inventory/extract-queue.zip"
   server_side_encryption = "AES256"
   tags                   = local.common-tags
@@ -98,7 +98,7 @@ resource "aws_s3_bucket_object" "extract-queue" {
 
 resource "aws_s3_bucket_object" "validate" {
   key                    = "validate.zip"
-  bucket                 = aws_s3_bucket.resultbucket1.id
+  bucket                 = aws_s3_bucket.assets-bucket.id
   source                 = "inventory/validate.zip"
   server_side_encryption = "AES256"
   tags                   = local.common-tags
@@ -115,8 +115,8 @@ resource "aws_s3_bucket_object" "successtest" {
   ]
 }
 
-resource "aws_s3_bucket_public_access_block" "result1-block-public" {
-  bucket                  = aws_s3_bucket.resultbucket1.id
+resource "aws_s3_bucket_public_access_block" "assets-bucket-block-pub" {
+  bucket                  = aws_s3_bucket.assets-bucket.id
   block_public_acls       = true
   block_public_policy     = true
   restrict_public_buckets = true
