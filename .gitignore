@@ -32,9 +32,10 @@ override.tf.json
 # example: *tfplan*
 /.terraform.lock.hcl
 /builds
-/provider.tf
+provider.tf
 remote_state.tf
 *.pem*
 /.idea
 .idea
 .terraform.lock.hcl
+aws-textract-comprehend/terraform/provider.tf
