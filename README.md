@@ -4,3 +4,4 @@
 * `amazon-msk` - Managed Services for Kafka including a client & VPC supporting the cluster
 * `amazon-event-architecture` - Well-Architected event-driven architecture including Amazon SNS, SQS & Lambda
 * `aws-textract-comprehend` - AWS Textract + Comprehend analyzes `.png`,`.pdf`,`.jpg` files into parseable and searchable text through Amazon Athena
+* `amazon-spa` - Amazon Single Page Application deployment, perfect for Hugo\Gatsby deployments
