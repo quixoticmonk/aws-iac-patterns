@@ -39,3 +39,5 @@ remote_state.tf
 .idea
 .terraform.lock.hcl
 aws-textract-comprehend/terraform/provider.tf
+.DS_Store
+amazon-spa/.DS_Store

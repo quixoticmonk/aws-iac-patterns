@@ -1,0 +1,27 @@
+{
+   "app":"python3 app.py",
+   "context":{
+      "@aws-cdk/core:enableStackNameDuplicates":"true",
+      "aws-cdk:enableDiffNoFail":"true",
+      "@aws-cdk/core:stackRelativeExports":"true",
+      "@aws-cdk/aws-ecr-assets:dockerIgnoreSupport":true,
+      "@aws-cdk/aws-secretsmanager:parseOwnedSecretName":true,
+      "@aws-cdk/aws-kms:defaultKeyPolicies":true,
+      "@aws-cdk/aws-s3:grantWriteWithoutAcl":true,
+      "@aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount":true,
+      "@aws-cdk/core:newStyleStackSynthesis": true,
+
+      "staticsite": {
+         "project_name": "",
+         "bucket_name": "",
+         "domain_names": [],
+         "cert_arn": "",
+         "lambda_edge_timeout_in_seconds": 5,
+         "lambda_edge_memory": 128,
+         "lambda_edge_handler": "",
+         "lambda_edge_handler_path": "",
+         "origin_path": ""
+
+      }
+   }
+}
