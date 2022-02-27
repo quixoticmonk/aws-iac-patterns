@@ -5,3 +5,4 @@
 * `amazon-event-architecture` - Well-Architected event-driven architecture including Amazon SNS, SQS & Lambda
 * `aws-textract-comprehend` - AWS Textract + Comprehend analyzes `.png`,`.pdf`,`.jpg` files into parseable and searchable text through Amazon Athena
 * `amazon-eks` - EKS cluster deployment config with CDK
+* `amazon-spa` - Amazon Single Page Application deployment, perfect for Hugo\Gatsby deployments

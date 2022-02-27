@@ -1,7 +1,14 @@
 
-# Welcome to your CDK Python project!
+# An implementation of Search using Amazon Kendra.
+The iac code deploys the below resources:
+* Kendra index
+* Kendra web crawler data source
+* Service roles required for Kendra index/data source
 
-This is a blank project for Python development with CDK.
+
+# Pending
+* Additional datasources
+* Kendra query endpopint with a lambda and api gateway
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
