@@ -91,7 +91,29 @@ class EksStack(Stack):
             node_role=self.node_role
         )
 
-        self.master_role = Role.from_role_arn(self, f"{context['prefix']}-master-role",
-                                              role_arn=context['auth_role_arn'])
+        self.add_user_admin(context)
 
-        AwsAuth(self, f"{context['prefix']}-aws-auth", cluster=self.eks_cluster).add_masters_role(role=self.master_role)
+    def add_user_admin(self, context):
+
+        self.eks_cluster.add_manifest(
+            "eks-masters-user",
+            {
+                "apiVersion": "v1",
+                "kind": "ConfigMap",
+                "metadata": {
+                    "name": "aws-auth",
+                    "namespace": "kube-system",
+                },
+                "data": {
+                    "mapRoles": [
+                        {
+                            "rolearn": context['auth_role_arn'],
+                            "username": "ops",
+                            "groups": [
+                                "system:masters"
+                            ],
+                        }
+                    ]
+                }
+            },
+        )
